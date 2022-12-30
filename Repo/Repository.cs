@@ -16,22 +16,22 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
         _dataContext = dataContext;
     }
 
-    public async Task AdicionarAsync(TEntity entity)
+    public async Task<IEnumerable<TEntity>> AdicionarAsync(TEntity entity)
     {
         await _DbSet.AddAsync(entity);
-        SalvarAlteracoesAsync();
+        return await SalvarAlteracoesAsync();
     }
 
-    public async Task AtualizarAsync(TEntity entity)
+    public async Task<IEnumerable<TEntity>> AtualizarAsync(TEntity entity)
     {
         _DbSet.Update(entity);
-        SalvarAlteracoesAsync();
+        return await SalvarAlteracoesAsync();
     }
 
-    public async Task DeletarAsync(TEntity entity)
+    public async Task<IEnumerable<TEntity>> DeletarAsync(TEntity entity)
     {
         _DbSet.Remove(entity);
-        SalvarAlteracoesAsync();
+        return await SalvarAlteracoesAsync();
     }
 
     public async Task<TEntity> MostrarPorId(Guid id)
@@ -51,8 +51,9 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
         return await query.ToListAsync();
     }
 
-    public async void SalvarAlteracoesAsync()
+    public async Task<IEnumerable<TEntity>> SalvarAlteracoesAsync()
     {
         await _dataContext.SaveChangesAsync();
+        return await MostrarTodos();
     }
 }

@@ -36,8 +36,7 @@ namespace GamesAPI.Controllers
         {
             try
             {
-                await _gameRepository.AdicionarAsync(game);
-                return Ok(game);
+                return Ok(await _gameRepository.AdicionarAsync(game));
             }
             catch (Exception e)
             {
@@ -52,8 +51,7 @@ namespace GamesAPI.Controllers
 
             try
             {
-                await _gameRepository.AtualizarAsync(game);
-                return Ok(game);
+                return Ok(await _gameRepository.AtualizarAsync(game));
             }
             catch (Exception e)
             {
@@ -67,8 +65,7 @@ namespace GamesAPI.Controllers
         {
             try
             {
-                await _gameRepository.DeletarAsync(game);
-                return Ok(game);
+                return Ok(await _gameRepository.DeletarAsync(game));
             }
             catch (Exception e)
             {
@@ -76,6 +73,18 @@ namespace GamesAPI.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Game>> BuscarPorId(Guid id)
+        {
+            try
+            {
+                return Ok(await _gameRepository.MostrarPorId(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 
 }
